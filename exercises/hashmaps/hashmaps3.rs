@@ -14,8 +14,6 @@
 
 // Execute `rustlings hint hashmaps3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 use std::collections::HashMap;
 
 // A structure to store team name and its goal details.
@@ -40,15 +38,21 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         // will be number of goals conceded from team_2, and similarly
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
+        let mut team_1_pre_score = 0;
+        let mut team_1_pre_conceded = 0;
+        let mut team_2_pre_score = 0;
+        let mut team_2_pre_conceded = 0;
         match scores.get(&team_1_name) {
             Some(score) => {
-                let team_1_score = team_1_score + score.goals_scored;
+                team_1_pre_score = score.goals_scored;
+                team_1_pre_conceded = score.goals_conceded;
             }
             None => {}
         }
         match scores.get(&team_2_name) {
             Some(score) => {
-                let team_2_score = team_2_score + score.goals_scored;
+                team_2_pre_score = score.goals_scored;
+                team_2_pre_conceded = score.goals_conceded;
             }
             None => {}
         }
@@ -56,16 +60,16 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
             team_1_name.clone(),
             Team {
                 name: team_1_name.clone(),
-                goals_scored: team_1_score,
-                goals_conceded: team_2_score,
+                goals_scored: team_1_score + team_1_pre_score,
+                goals_conceded: team_2_score + team_1_pre_conceded,
             },
         );
         scores.insert(
             team_2_name.clone(),
             Team {
                 name: team_2_name.clone(),
-                goals_scored: team_2_score,
-                goals_conceded: team_1_score,
+                goals_scored: team_2_score + team_2_pre_score,
+                goals_conceded: team_1_score + team_2_pre_conceded,
             },
         );
     }
