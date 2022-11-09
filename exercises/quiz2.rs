@@ -37,11 +37,11 @@ mod my_module {
                 Command::Uppercase => string.to_uppercase().to_string(),
                 Command::Trim => string.trim().to_string(),
                 Command::Append(n) => {
-                    let mut s = string.clone();
-                    for i in 0..*n {
-                        s.push_str("bar");
-                    }
-                    s
+                    let s = (0..*n)
+                        .map(|_| "bar".to_string())
+                        .collect::<Vec<String>>()
+                        .join("");
+                    format!("{}{}", string, s)
                 }
             })
         }
